@@ -5,6 +5,8 @@ VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COIDataExport", "COIDataExport.csproj", "{F5D9184A-9306-4A29-B835-68878A83DC3D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COIWorldMapModify", "..\COIMapModification\COIWorldMapModify.csproj", "{91AC54D0-8F4E-456C-81EB-F044829F5562}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F5D9184A-9306-4A29-B835-68878A83DC3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5D9184A-9306-4A29-B835-68878A83DC3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5D9184A-9306-4A29-B835-68878A83DC3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

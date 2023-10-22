@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class TerrainRoot
     {

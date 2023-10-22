@@ -2,13 +2,13 @@
 using Mafi.Core.Factory.Recipes;
 using Newtonsoft.Json;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class Recipe
     {
         public Recipe(RecipeProto recipe)
         {
-            ID = recipe.Id.Value;
+            Id = recipe.Id.Value;
             foreach (var recipe_all_input in recipe.AllUserVisibleInputs)
             {
                 Inputs.Add(new Cost(recipe_all_input));
@@ -24,8 +24,8 @@ namespace COIDataExport
 
         }
 
-        [JsonProperty("ID")]
-        public string ID { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }

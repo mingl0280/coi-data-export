@@ -2,7 +2,7 @@
 using Mafi.Core.Entities.Dynamic;
 using Newtonsoft.Json;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class Vehicle
     {

@@ -3,7 +3,7 @@ using Mafi.Core.Entities.Static;
 using Mafi.Core.Factory.Machines;
 using Newtonsoft.Json;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class MachineAndBuilding
     {
@@ -69,6 +69,18 @@ namespace COIDataExport
 
         [JsonProperty("category")]
         public string Category { get; set; }
+
+        [JsonProperty("category_loc_str")]
+        public string CategoryLocalizedStr { get; set; }
+
+        [JsonProperty("is_farm")]
+        public bool IsFarm { get; set; } = false;
+
+        [JsonProperty("is_storage")] 
+        public bool IsStorage { get; set; } = false;
+
+        [JsonProperty("is_mine")] 
+        public bool IsMine { get; set; } = false;
 
         [JsonProperty("workers")]
         public int Workers { get; set; }

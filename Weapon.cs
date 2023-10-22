@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mafi.Core.Fleet;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class Weapon
     {

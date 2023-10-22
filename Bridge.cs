@@ -2,7 +2,7 @@
 using System.Reflection;
 using Mafi.Core.Fleet;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class Bridge
     {

@@ -4,7 +4,7 @@ using Mafi.Core.Entities.Static;
 using Mafi.Core.Factory.Machines;
 using Mafi.Core.Prototypes;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class MachineUtilites : GetAllFieldsUtilities
     {

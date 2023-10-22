@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -23,7 +24,7 @@ using Newtonsoft.Json;
 using Mafi.Base.Prototypes.Machines;
 using Mafi.Core.Entities.Static;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public sealed class COIDataExport : DataOnlyMod, IMod
     {
@@ -32,7 +33,7 @@ namespace COIDataExport
         public override string Name => "COI Data Export";
 
         // Version, currently unused.
-        public override int Version => 1;
+        public override int Version => 2;
 
         // Mod constructor that lists mod dependencies as parameters.
         // This guarantee that all listed mods will be loaded before this mod.
@@ -48,6 +49,8 @@ namespace COIDataExport
         {
             Log.Info("COIDataExport: Register...");
         }
+
+        private static CategoryRoot _categoryRoot = new CategoryRoot();
 
         private void PrintItems<T>(T target)
         {
@@ -192,7 +195,7 @@ namespace COIDataExport
             Log.Info("COIExport: CargoDepotModuleProto OK");
 
             WriteJson(JsonConvert.SerializeObject(machines_data, Formatting.Indented), "machines_and_buildings");
-
+            WriteJson(JsonConvert.SerializeObject(_categoryRoot.Categories, Formatting.Indented), "categories");
 
             TerrainRoot terrains = new TerrainRoot() { GameVersion = _gameVersion };
 
@@ -210,35 +213,71 @@ namespace COIDataExport
         {
             var proto = protosDb.Get(machine_id);
             var machine_proto = (StaticEntityProto)proto.Value;
+            
 
             if (machine_proto == null)
             {
-                return new MachineAndBuilding(machine_id.Value);
+                if (!_categoryRoot.Categories.ContainsKey("noCategory"))
+                {
+                    _categoryRoot.Categories.Add("noCategory", new CategoryType(){Id="no_category", NameEng = "No Category", Recipes = new HashSet<string>(), Machines = new HashSet<string>(){machine_id.Value}});
+                }
+                else
+                {
+                    _categoryRoot.Categories["noCategory"].Machines.Add(machine_id.Value);
+                }
+                return new MachineAndBuilding(machine_id.Value){Category = "noCategory"};
             }
 
             Log.Info($"machine: {machine_id.Value}, proto = {proto.Value.GetType().Name}");
 
 
-            Log.Info("1");
             MachineAndBuilding item = new MachineAndBuilding(machine_proto);
-            Log.Info("2");
-            if (machine_proto.Graphics.GetType().IsAssignableFrom(typeof(LayoutEntityProto.Gfx)))
-            {
+
+            Log.Info($"Type: {machine_proto.GetType().Name}");
+
+            try
+            {  
                 var g = (LayoutEntityProto)machine_proto;
+                Log.Info("MachineProto/LayoutEntityProto");
                 // Get the last category from the machine's Graphics.Categories list
                 if (g.Graphics.Categories.IsNotEmpty)
                 {
+                    Log.Info($"Category items:{g.Graphics.Categories.Length}; ");
+                    List<string> cat_strs = new List<string>();
+                    foreach (var graphics_category in g.Graphics.Categories)
+                    {
+                        cat_strs.Add(graphics_category.Id.Value + ";" + graphics_category.Strings.Name);
+                    }
+
+                    Log.Info(string.Join(",", cat_strs));
                     item.Category = g.Graphics.Categories[g.Graphics.Categories.Length - 1].Id
                         .Value;
+                    var cat_str = g.Graphics.Categories[g.Graphics.Categories.Length - 1].Strings.Name;
+                    item.CategoryLocalizedStr = cat_str.GetEnUsStrFromLocStr().ToString();
+                    if (!_categoryRoot.Categories.ContainsKey(item.Category))
+                    {
+                        _categoryRoot.Categories.Add(item.Category,
+                            new CategoryType()
+                            {
+                                Id = item.Category,
+                                NameEng = cat_str.GetEnUsStrFromLocStr().ToString()
+                            });
+                    }
+                    _categoryRoot.Categories[item.Category].Machines.Add(machine_id.Value);
                 }
             }
-            Log.Info($"Type: {machine_proto.GetType().Name}");
+            catch
+            {
+                Log.Info("Cannot convert to LayoutEntityProto");
+            }
+
             try
             {
                 var r = (MachineProto)machine_proto;
                 foreach (var item_recipe in r.Recipes)
                 {
                     item.Recipes.Add(new Recipe(item_recipe));
+                    _categoryRoot.Categories[item.Category].Recipes.Add(item_recipe.Id.Value);
                 }
             }
             catch
@@ -264,7 +303,6 @@ namespace COIDataExport
                     }
                     break;
                 case "MechPowerGeneratorFromProductProto":
-
                     break;
                 case "SolarElectricityGeneratorProto":
                     var solar_item = proto.Value as SolarElectricityGeneratorProto;
@@ -283,17 +321,32 @@ namespace COIDataExport
                         item.ResearchSpeed = (60 / lab_item.DurationForRecipe.Seconds *
                                               lab_item.StepsPerRecipe).ToDouble();
                     break;
+                case "StorageBaseProto":
+                    var storage_item = proto.Value as StorageBaseProto;
+                    if (storage_item != null)
+                    {
+                        item.StorageCapacity = storage_item.Capacity.Value;
+                        item.StorageTransferSpeed = (storage_item.TransferLimit.Value / storage_item.TransferLimitDuration.Seconds * 60).ToDouble();
+                    }
+                    break;
+                case "TransportProto":
+                    item.Category = "transportsCategory";
+                    break;
+                case "StatueProto":
+                    item.Category = "landmarksCategory";
+                    break;
+                case "ShipyardProto":
+                    item.Category = "docksCategory";
+                    break;
+                case "RuinsProto":
+                    item.Category = "adminCategory";
+                    break;
+                case "FarmProto":
+                    item.IsFarm = true;
+                    break;
             }
-
-            if (proto.Value.GetType().IsAssignableFrom(typeof(StorageBaseProto)))
-            {
-                var storage_item = proto.Value as StorageBaseProto;
-                if (storage_item != null)
-                {
-                    item.StorageCapacity = storage_item.Capacity.Value;
-                    item.StorageTransferSpeed = (storage_item.TransferLimit.Value / storage_item.TransferLimitDuration.Seconds * 60).ToDouble();
-                }
-            }
+            
+            
 
             return item;
         }

@@ -1,7 +1,8 @@
 ﻿using Mafi.Core;
 using Mafi.Core.Factory.Recipes;
+using Newtonsoft.Json;
 
-namespace COIDataExport
+namespace COIWorldMapChange
 {
     public class Cost
     {
@@ -13,23 +14,31 @@ namespace COIDataExport
 
         public Cost(ProductQuantity input)
         {
-            Product = input.Product.Id.Value;
+            Id = input.Product.Id.Value;
+            Product = input.Product.Strings.Name.TranslatedString;
             Quantity = input.Quantity.Value;
         }
 
         public Cost(RecipeInput input)
         {
-            Product = input.Product.Id.Value;
+            Id = input.Product.Id.Value;
+            Product = input.Product.Strings.Name.TranslatedString;
             Quantity = input.Quantity.Value;
         }
 
         public Cost(RecipeOutput input)
         {
-            Product = input.Product.Id.Value;
+            Id = input.Product.Id.Value;
+            Product = input.Product.Strings.Name.TranslatedString;
             Quantity = input.Quantity.Value;
         }
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
+        [JsonProperty("product_name")]
         public string Product { get; }
+
+        [JsonProperty("quantity")]
         public int Quantity { get; }
     }
 }
