@@ -1,7 +1,7 @@
 ﻿using Mafi.Core.Products;
 using Newtonsoft.Json;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class TerrainMaterial
     {

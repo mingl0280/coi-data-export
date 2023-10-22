@@ -5,7 +5,7 @@ using Mafi.Core.Fleet;
 using Mafi.Core.Vehicles.Jobs;
 using static Mafi.Base.Ids;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class FleetUtilities : GetAllFieldsUtilities
     {

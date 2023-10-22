@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Mafi.Core.Fleet;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class ShipHull
     {

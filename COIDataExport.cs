@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 using Mafi.Base.Prototypes.Machines;
 using Mafi.Core.Entities.Static;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public sealed class COIDataExport : DataOnlyMod, IMod
     {

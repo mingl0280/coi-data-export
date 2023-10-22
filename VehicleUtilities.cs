@@ -4,7 +4,7 @@ using System.Reflection;
 using Mafi.Base;
 using Mafi.Core.Entities.Dynamic;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class VehicleUtilities : GetAllFieldsUtilities
     {

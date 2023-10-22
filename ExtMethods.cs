@@ -1,6 +1,6 @@
 ﻿using Mafi.Localization;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public static class ExtMethods
     {

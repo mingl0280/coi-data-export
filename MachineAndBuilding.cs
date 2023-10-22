@@ -3,7 +3,7 @@ using Mafi.Core.Entities.Static;
 using Mafi.Core.Factory.Machines;
 using Newtonsoft.Json;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class MachineAndBuilding
     {

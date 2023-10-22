@@ -2,7 +2,7 @@
 using Mafi.Core.Factory.Recipes;
 using Newtonsoft.Json;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class Recipe
     {

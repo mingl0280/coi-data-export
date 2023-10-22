@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class GetAllFieldsUtilities
     {

@@ -2,7 +2,7 @@
 using Mafi.Localization;
 using Newtonsoft.Json;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class CategoryType
     {

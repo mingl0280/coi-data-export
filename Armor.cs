@@ -2,7 +2,7 @@
 using System.Reflection;
 using Mafi.Core.Fleet;
 
-namespace COIWorldMapChange
+namespace COIDataExport
 {
     public class Armor
     {
