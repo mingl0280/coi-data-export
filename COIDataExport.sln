@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COIDataExport", "COIDataExp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COIWorldMapModify", "..\COIMapModification\COIWorldMapModify.csproj", "{91AC54D0-8F4E-456C-81EB-F044829F5562}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "COIModUranium", "..\COIModUranium\COIModUranium.csproj", "{0083794B-08F6-42E9-827F-90103A97F631}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91AC54D0-8F4E-456C-81EB-F044829F5562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0083794B-08F6-42E9-827F-90103A97F631}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0083794B-08F6-42E9-827F-90103A97F631}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0083794B-08F6-42E9-827F-90103A97F631}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0083794B-08F6-42E9-827F-90103A97F631}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

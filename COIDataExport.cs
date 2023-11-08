@@ -23,6 +23,14 @@ using Mafi.Core.Products;
 using Newtonsoft.Json;
 using Mafi.Base.Prototypes.Machines;
 using Mafi.Core.Entities.Static;
+using Mafi.Core.Factory.Recipes;
+using Mafi.Core.MessageNotifications;
+using Mafi.Core.Research;
+using Mafi.Unity;
+using Mafi.Unity.UiFramework.Components.Tabs;
+using Mafi.Unity.Utils;
+using UnityEngine;
+using Assets = Mafi.Unity.Assets;
 
 namespace COIDataExport
 {
@@ -42,12 +50,22 @@ namespace COIDataExport
         {
             // You can use Log class for logging. These will be written to the log file
             // and can be also displayed in the in-game console with command `also_log_to_console`.
+            if (!Directory.Exists("assets/buildings"))
+            {
+                Directory.CreateDirectory("assets/buildings");
+            }
+            if (!Directory.Exists("assets/products"))
+            {
+                Directory.CreateDirectory("assets/products");
+            }
             Log.Info("COIDataExport: constructed.");
+
         }
 
         public override void RegisterPrototypes(ProtoRegistrator registrator)
         {
             Log.Info("COIDataExport: Register...");
+            Log.Info("COIDataExport: Register Complete");
         }
 
         private static CategoryRoot _categoryRoot = new CategoryRoot();
@@ -139,6 +157,7 @@ namespace COIDataExport
 
         void IMod.RegisterDependencies(DependencyResolverBuilder depBuilder, ProtosDb protosDb, bool gameWasLoaded)
         {
+            
             Log.Info("COIDataExport: Main Module Entry");
             _gameVersion = typeof(Mafi.Base.BaseMod).GetTypeInfo().Assembly.GetName().Version.ToString();
 
@@ -202,7 +221,7 @@ namespace COIDataExport
             foreach (var terrain in protosDb.All<TerrainMaterialProto>())
             {
                 var terrain_ent = terrain;
-                Log.Info($"Terrain_ent == null: {terrain_ent}");
+                //Log.Info($"Terrain_ent == null: {terrain_ent}");
                 terrains.TerrainMaterials.Add(new TerrainMaterial(terrain_ent));
             }
             Log.Info("Terrains OK");
@@ -228,28 +247,39 @@ namespace COIDataExport
                 return new MachineAndBuilding(machine_id.Value){Category = "noCategory"};
             }
 
-            Log.Info($"machine: {machine_id.Value}, proto = {proto.Value.GetType().Name}");
-
-
             MachineAndBuilding item = new MachineAndBuilding(machine_proto);
 
-            Log.Info($"Type: {machine_proto.GetType().Name}");
-
             try
-            {  
+            {
                 var g = (LayoutEntityProto)machine_proto;
-                Log.Info("MachineProto/LayoutEntityProto");
+                //Log.Info("MachineProto/LayoutEntityProto");
+                if (!ExtMethods.CreatedImgs.Contains($"{machine_id.Value}.png"))
+                {
+                    try
+                    {
+                        if (!string.IsNullOrWhiteSpace(g.Graphics.IconPath))
+                        {
+                            IconProvider provider = new IconProvider(ExtMethods.GetMainInstance().AssetsDb);
+                            var go = provider.GetIconPooled(new IconSpec(g.IconPath));
+                            go.SaveGameObjectToPng($"assets/buildings/{machine_id.Value}.png");
+                            provider.ReturnIconToPool(ref go);
+                            ExtMethods.CreatedImgs.Add($"{machine_id.Value}.png");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Warning($"{ex.Message}\r\n{ex.StackTrace}");
+                    }
+                }
+
                 // Get the last category from the machine's Graphics.Categories list
                 if (g.Graphics.Categories.IsNotEmpty)
                 {
-                    Log.Info($"Category items:{g.Graphics.Categories.Length}; ");
                     List<string> cat_strs = new List<string>();
                     foreach (var graphics_category in g.Graphics.Categories)
                     {
                         cat_strs.Add(graphics_category.Id.Value + ";" + graphics_category.Strings.Name);
                     }
-
-                    Log.Info(string.Join(",", cat_strs));
                     item.Category = g.Graphics.Categories[g.Graphics.Categories.Length - 1].Id
                         .Value;
                     var cat_str = g.Graphics.Categories[g.Graphics.Categories.Length - 1].Strings.Name;
@@ -277,6 +307,7 @@ namespace COIDataExport
                 foreach (var item_recipe in r.Recipes)
                 {
                     item.Recipes.Add(new Recipe(item_recipe));
+                    ExportRecipies.ExportRecipeItems.Add(item_recipe.Id.Value, new ExportRecipeItem(item_recipe, machine_proto.Id.Value));
                     _categoryRoot.Categories[item.Category].Recipes.Add(item_recipe.Id.Value);
                 }
             }
@@ -345,8 +376,6 @@ namespace COIDataExport
                     item.IsFarm = true;
                     break;
             }
-            
-            
 
             return item;
         }
@@ -397,7 +426,7 @@ namespace COIDataExport
             // For Bridges
             foreach (FleetEntityPartProto.ID upgrade_id in FleetUtilities.GetAllBridges())
             {
-                Log.Info(upgrade_id.Value);
+                //Log.Info(upgrade_id.Value);
                 Option<FleetBridgePartProto> item = protosDb.Get<FleetBridgePartProto>(upgrade_id);
                 var bridge_item = new Bridge(item.Value);
 
@@ -449,5 +478,8 @@ namespace COIDataExport
                 writer.Flush();
             }
         }
+
+       
     }
+    
 }
